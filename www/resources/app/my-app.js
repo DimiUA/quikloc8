@@ -57,6 +57,9 @@ function onDeviceReady(){
     if (window.MobileAccessibility) {
         window.MobileAccessibility.usePreferredTextZoom(false);    
     }
+    if (StatusBar) {
+        StatusBar.styleDefault();
+    } 
 
     setupPush();
 
@@ -126,9 +129,7 @@ function setupPush(){
             }
             else if (data && data.additionalData && data.additionalData.payload){
                //if user NOT using app and push notification comes
-                var container = $$('body');
-                if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
-                App.showProgressbar(container); 
+                App.showIndicator();
                
                 loginTimer = setInterval(function() {
                     //alert(loginDone);
@@ -137,22 +138,42 @@ function setupPush(){
                         setTimeout(function(){
                             //alert('before processClickOnPushNotification');
                             processClickOnPushNotification([data.additionalData.payload]);
-                            App.hideProgressbar();               
+                            App.hideIndicator();         
                         },1000); 
                     }
                 }, 1000); 
             }
+            if (device && device.platform && device.platform.toLowerCase() == 'ios') {
+                push.finish(
+                    () => {
+                      console.log('processing of push data is finished');
+                    },
+                    () => {
+                      console.log(
+                        'something went wrong with push.finish for ID =',
+                        data.additionalData.notId
+                      );
+                    },
+                    data.additionalData.notId
+                );
+            }
+                
         });
 
         if　(!localStorage.ACCOUNT){
-            push.clearAllNotifications();
+            push.clearAllNotifications(
+                () => {
+                  console.log('success');
+                },
+                () => {
+                  console.log('error');
+                }
+            );
         }
 }
 
 function onAppPause(){ 
-    if ($hub) {
-        $hub.stop();
-    }
+    
 } 
 function onAppResume(){    
     if (localStorage.ACCOUNT && localStorage.PASSWORD) {
@@ -160,9 +181,7 @@ function onAppResume(){
         getNewData();
     }
    
-    if ($hub) {
-        $hub.start();
-    } 
+    
 }  
 
  
@@ -178,56 +197,7 @@ function backFix(event){
     } 
 }
 
-function webSockConnect(){ 
-    var MinorToken = getUserinfo().MinorToken;
-    var deviceToken = !localStorage.PUSH_DEVICE_TOKEN ? '123' : localStorage.PUSH_DEVICE_TOKEN;
-    $hub = hubHelper({ url :"http://api.Quikdata.co:8088/",
-                           qs: {
-                                MinorToken : MinorToken,
-                                DeviceToken : encodeURIComponent(deviceToken)
-                           },
-                           hub: "v1Hub"
-    },{
-        receiveMessage: function(from, msg){
-            
-        },
-        receiveNotice: function(msg){
-            
-            /*if (!inBrowser) {                
-                plus.push.clear();
-            }  */          
-            console.log(msg);
-            var objMsg = isJsonString(msg);      
-            if ( objMsg ) {
-                var message = {};
-                var all_msg = [];                
-                
-                message.payload = msg;  
-                     
-                all_msg.push(message);
-                
-                var deviceType = localStorage.DEVICE_TYPE; 
-                if (deviceType == "web") {
-                    setNotificationList(all_msg);
-                }                
-                getNewNotifications();
-            
-                /*var page = App.getCurrentView().activePage;        
-                if ( page && page.name != "notification" ) {
-                    $$('.notification_button').addClass('new_not');
-                    showMsgNotification(all_msg);
-                    
-                }else if (deviceType == "web"){
-                	var messageList = setCurrentTimezone(all_msg);
-                    showNotification(messageList);
-                }*/
-            }
-                
-        }
-    });
-            
-    $hub.start();
-}
+
 
 // Initialize your app
 var App = new Framework7({
@@ -1857,9 +1827,7 @@ function clearUserInfo(){
     
     
     localStorage.clear();
-    if ($hub) {
-        $hub.stop();        
-    }  
+    
     if (updateAssetsPosInfoTimer) {
         clearInterval(updateAssetsPosInfoTimer);
     }
@@ -1956,7 +1924,7 @@ function login(){
                 updateUserCredits(result.Data.UserInfo.SMSTimes);
                 updateMenuUserData(result.Data.UserInfo);
                                                  
-                webSockConnect();
+                
                 getNewNotifications();
                 App.closeModal();                 
 
@@ -3370,9 +3338,7 @@ function getNewNotifications(params){
                 if (params && params.ptr === true) {
                     App.pullToRefreshDone();
                 }                
-                if(window.plus) {
-                    plus.push.clear();
-                }
+              
                 
                 console.log(result);                       
                 if (result.MajorCode == '000') {

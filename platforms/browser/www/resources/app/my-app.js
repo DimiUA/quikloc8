@@ -451,8 +451,7 @@ $$('body').on('click', 'a.external', function(event) {
     event.preventDefault();
     var href = this.getAttribute('href');
     if (href) {
-        if (typeof navigator !== "undefined" && navigator.app) {
-            //plus.runtime.openURL(href);            
+        if (typeof navigator !== "undefined" && navigator.app) {                
             navigator.app.loadUrl(href, {openExternal: true}); 
         } else {
             window.open(href,'_blank');

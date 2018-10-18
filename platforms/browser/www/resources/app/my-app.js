@@ -835,15 +835,20 @@ App.onPageInit('asset', function (page) {
         checkBalanceAndLoadPage('asset.alarm');
     });
 
-    loadPageTrackingInterval.on('click', function(){      
+    loadPageTrackingInterval.on('click', function(){  
+        var countryCode = getUserinfo().UserInfo.CountryCode; 
+        var trackingIntervalDetails = getTrackingIntervalDetailByCountyCode(countryCode); 
+        var data = {
+            Name: asset.Name,
+            IMEI: asset.IMEI,
+            Cost: trackingIntervalDetails.cost,
+            PayLink: trackingIntervalDetails.payLink,
+            PayPlanCode: trackingIntervalDetails.payPlanCode, 
+        };
         
         mainView.router.load({
             url:'resources/templates/asset.tracking.interval.html',
-            context:{
-                Name: asset.Name,
-                IMEI: asset.IMEI,
-                /*IMSI: asset.IMSI,*/
-            }
+            context: data
         });
     });
 
@@ -1061,6 +1066,7 @@ App.onPageInit('asset.tracking.interval', function (page) {
     var rangeInput = $$(page.container).find('input[name="rangeInput"]');
     var trackingPeriod = $$(page.container).find('input[name="tracking-period"]');
     var assetImeiInput = $$(page.container).find('input[name=trackingIntervalImei]').val();
+    var countryCode = getUserinfo().UserInfo.CountryCode;
     var params = {
     	trackingIntervalEl: $$(page.container).find('.trackingInterval'),
 	    trackingCostEl: $$(page.container).find('.trackingCost'),
@@ -1068,7 +1074,22 @@ App.onPageInit('asset.tracking.interval', function (page) {
 	    /*trackingPeriodElVal: $$(page.container).find('[name="tracking-period"]:checked').val(),*/
 	    bottomIndicator: $$(page.container).find('.bottom-indicator'),	    
 	    assetImei: assetImeiInput ? assetImeiInput : TargetAsset.IMEI,
+        //countryCode: countryCode ? countryCode : 'OTHER', 
     };
+
+    switch (countryCode){
+        case 'AUS':
+            params.countryCode = countryCode;
+            break;
+        default:
+            params.countryCode = 'OTHER';
+    }
+   
+    if (upgradeNowButton.data('paylink') && upgradeNowButton.data('payplancode')) {
+        upgradeNowButton.removeClass('disabled');
+    }else{
+        upgradeNowButton.addClass('disabled');
+    } 
 
     rangeInput.on('change input', function(){      
         params.value = $$(this).val();
@@ -1096,12 +1117,11 @@ App.onPageInit('asset.tracking.interval', function (page) {
                 App.hidePreloader();               
                 if (result.MajorCode == '000') { 
                     if (paylink) {
-                        if (typeof navigator !== "undefined" && navigator.app) {
-            //plus.runtime.openURL(href);            
-            navigator.app.loadUrl(href, {openExternal: true}); 
-        } else {
-            window.open(href,'_blank');
-        }
+                        if (typeof navigator !== "undefined" && navigator.app) {           
+                            navigator.app.loadUrl(paylink, {openExternal: true}); 
+                        } else {
+                            window.open(paylink,'_blank');
+                        }
                         setTimeout(function(){
                             App.modal({                
                                 text: LANGUAGE.PROMPT_MSG030, //LANGUAGE.PROMPT_MSG017
@@ -2911,12 +2931,27 @@ function updateTrackingHint(params){
     $$('.bottom-indicator-'+params.value).addClass('color-dealer');
 
     params.trackingIntervalEl.html(Protocol.TrackingInterval[params.value].intervalDisplayed);
-    params.trackingCostEl.html(Protocol.TrackingInterval[params.value][trackingPeriodElVal].cost);
-    params.upgradeNowButtonEl.data('paylink',Protocol.TrackingInterval[params.value][trackingPeriodElVal].button+'&on0=imei&os0='+params.assetImei+'&on1=dn&os1='+AppDetails.code+'&on2=appname&os2='+AppDetails.name);
-    params.upgradeNowButtonEl.data('payplancode',Protocol.TrackingInterval[params.value][trackingPeriodElVal].payPlanCode);
+    params.trackingCostEl.html(Protocol.TrackingInterval[params.value][trackingPeriodElVal][params.countryCode].cost);
+    params.upgradeNowButtonEl.data('paylink',Protocol.TrackingInterval[params.value][trackingPeriodElVal][params.countryCode].button+'&on0=imei&os0='+params.assetImei+'&on1=dn&os1='+AppDetails.code+'&on2=appname&os2='+AppDetails.name);
+    params.upgradeNowButtonEl.data('payplancode',Protocol.TrackingInterval[params.value][trackingPeriodElVal][params.countryCode].payPlanCode);
 
 }
 
+function getTrackingIntervalDetailByCountyCode(countryCode){
+    var ret = {
+        cost: 0,
+        payLink: '',
+        payPlanCode: '',
+    };
+    switch(countryCode){
+        case 'AUS':
+            ret.cost = Protocol.TrackingInterval[0][1][countryCode].cost;
+            ret.payLink = Protocol.TrackingInterval[0][1][countryCode].button;
+            ret.payPlanCode = Protocol.TrackingInterval[0][1][countryCode].payPlanCode;
+            break;
+    }
+    return ret;
+}
 
 function checkMapExisting(){
     if ($$('#map')) {

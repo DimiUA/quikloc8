@@ -2922,7 +2922,7 @@ function getNewAssetInfo(params){
 function updateTrackingHint(params){        
     var trackingPeriodElVal = $$('body').find('[name="tracking-period"]:checked').val();  
     
-    if (parseInt(params.value)  === 0) {
+    if (parseInt(Protocol.TrackingInterval[params.value][trackingPeriodElVal][params.countryCode].cost) === 0) {
     	params.upgradeNowButtonEl.addClass('disabled');
     }else{
     	params.upgradeNowButtonEl.removeClass('disabled');

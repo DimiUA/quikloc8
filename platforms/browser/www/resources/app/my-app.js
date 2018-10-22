@@ -39,6 +39,7 @@ function getPlusInfo(){
 
 var inBrowser = 0;
 localStorage.notificationChecked = 0;
+localStorage.loginDone = 0;
 var loginTimer = 0;
 
 
@@ -2334,7 +2335,7 @@ function setAssetListPosInfo(listObj){
                 }
                    
                 //console.log(POSINFOASSETLIST);
-
+                localStorage.loginDone = 1; 
                 App.hidePreloader();               
             }else{
                 //console.log(result);
@@ -3318,12 +3319,12 @@ function getNewNotifications(params){
         if (container.children('.progressbar, .progressbar-infinite').length) return; //don't run all this if there is a current progressbar loading
         App.showProgressbar(container);    
 
-        notificationChecked = 0;
+        localStorage.notificationChecked = 0;
         var url = API_URL.URL_GET_NEW_NOTIFICATIONS.format(MinorToken,encodeURIComponent(deviceToken));         
         //console.log(url);
         JSON1.request(url, function(result){
                 App.hideProgressbar();            
-                notificationChecked = 1;
+                localStorage.notificationChecked = 1;
                 if (params && params.ptr === true) {
                     App.pullToRefreshDone();
                 }                
@@ -3369,7 +3370,7 @@ function getNewNotifications(params){
             },
             function(){
                 App.hideProgressbar();
-                notificationChecked = 1;  
+                localStorage.notificationChecked = 1;  
                 if (params && params.ptr === true) {
                     App.pullToRefreshDone();
                 }             

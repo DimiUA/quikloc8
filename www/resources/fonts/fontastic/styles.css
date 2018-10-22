@@ -179,42 +179,48 @@
 .icon-other-status-acc2:before {
   content: "\55";
 }
-.icon-other-status-battery2:before {
+.icon-other-status-acc3:before {
   content: "\56";
 }
-.icon-other-status-date:before {
+.icon-other-status-battery2:before {
   content: "\57";
 }
-.icon-other-status-engine-hours:before {
+.icon-other-status-date:before {
   content: "\58";
 }
-.icon-other-status-imei:before {
+.icon-other-status-engine-hours:before {
   content: "\59";
 }
-.icon-other-status-mileage:before {
+.icon-other-status-imei:before {
   content: "\5a";
 }
-.icon-other-status-power:before {
+.icon-other-status-mileage:before {
   content: "\30";
 }
-.icon-other-status-relay:before {
+.icon-other-status-power:before {
   content: "\31";
 }
-.icon-other-status-satellite2:before {
+.icon-other-status-relay:before {
   content: "\32";
 }
-.icon-other-status-signal2:before {
+.icon-other-status-satellite2:before {
   content: "\33";
 }
-.icon-other-status-speed:before {
+.icon-other-status-signal2:before {
   content: "\34";
 }
-.icon-other-status-tower:before {
+.icon-other-status-speed:before {
   content: "\35";
 }
-.icon-other-status-voltage2:before {
+.icon-other-status-tower:before {
   content: "\36";
 }
-.icon-password-eye:before {
+.icon-other-status-voltage2:before {
   content: "\37";
+}
+.icon-password-eye:before {
+  content: "\38";
+}
+.icon-other-route:before {
+  content: "\39";
 }

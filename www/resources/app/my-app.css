@@ -1347,8 +1347,12 @@ body.with-panel-left-cover .panel-overlay{
 		 }
 
 		.request_location_button_wrapper{
-		    bottom: 16px;
-		    right: 16px;
+		    bottom: 88px;
+    		right: 16px;
+		}
+		.route_button_wrapper{
+			bottom: 16px;
+    		right: 16px;
 		}
 		.pano_button_wrapper{
 			border: 2px solid #fff;

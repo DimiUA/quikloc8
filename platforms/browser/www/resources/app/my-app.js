@@ -460,6 +460,24 @@ $$('body').on('click', 'a.external', function(event) {
     }
     return false;
 });
+$$('body').on('click', '.routeButton', function(){
+    var that = $$(this);
+    var lat = that.data('Lat');
+    var lng = that.data('Lng');
+    if (lat && lng) {
+        var href = API_URL.URL_ROUTE.format(
+            encodeURIComponent(lat),
+            encodeURIComponent(lng)
+            ); 
+        
+        if (typeof navigator !== "undefined" && navigator.app) {            
+            navigator.app.loadUrl(href, {openExternal: true});           
+        } else {
+            window.open(href,'_blank');
+        }
+    }
+    
+});
 $$('.login-form').on('submit', function (e) {    
     e.preventDefault();     
     preLogin();   
@@ -2974,9 +2992,18 @@ function updateMarkerPositionTrack(data){
                 data.routeButton.attr('href',API_ROUTE+latlng.lat+','+latlng.lng);
             }*/
 
+            if (data.routeButton) {                
+                data.routeButton.data('lat',latlng.lat);
+                data.routeButton.data('lng',latlng.lng);
+            }
+
             if (data.panoButton) {
                 data.panoButton.data('lat',latlng.lat);
                 data.panoButton.data('lng',latlng.lng);
+            }
+
+            if (data.posLatlng) {
+               data.posLatlng.html('GPS: ' + Protocol.Helper.convertDMS(latlng.lat, latlng.lng));             
             }
            
             Protocol.Helper.getAddressByGeocoder(latlng,function(address){

@@ -639,7 +639,23 @@ App.onPageInit('notification', function(page){
 	                            '</li>';
 	                    break; 
 
-	                case 'Location':
+                    default:
+
+                        ret = '<li class="swipeout" data-id="'+item.listIndex+'" data-alarm="'+item.alarm+'" data-lat="'+item.Lat+'" data-lng="'+item.Lng+'"  >' +                        
+                                    '<div class="swipeout-content item-content">' +
+                                        '<div class="item-inner">' +
+                                            '<div class="item-title-row">' +
+                                                '<div class="item-title">'+item.AssetName+'</div>' +
+                                                '<div class="item-after">'+item.PositionTime+'</div>' +
+                                            '</div>' +
+                                            '<div class="item-subtitle">'+item.alarm +'</div>' +                                        
+                                        '</div>' +
+                                    '</div>' +                      
+                                    '<div class="swipeout-actions-left">' +                             
+                                        '<a href="#" class="swipeout-delete swipeout-overswipe" data-confirm="'+LANGUAGE.PROMPT_MSG010+'" data-confirm-title="'+LANGUAGE.PROMPT_MSG014+'" data-close-on-cancel="true"><i class="f7-icons icon-header-delete"</i></a>' +
+                                    '</div>' +
+                                '</li>';
+	                /*case 'Location':
 	                	ret = '<li class="swipeout" data-id="'+item.listIndex+'" data-alarm="'+item.alarm+'" data-lat="'+item.Lat+'" data-lng="'+item.Lng+'"  >' +                        
 	                                '<div class="swipeout-content item-content">' +
 	                                    '<div class="item-inner">' +
@@ -682,7 +698,7 @@ App.onPageInit('notification', function(page){
 		                            '<div class="swipeout-actions-left">' +                             
 		                                '<a href="#" class="swipeout-delete swipeout-overswipe" data-confirm="'+LANGUAGE.PROMPT_MSG010+'" data-confirm-title="'+LANGUAGE.PROMPT_MSG014+'" data-close-on-cancel="true"><i class="f7-icons icon-header-delete"</i></a>' +
 		                            '</div>' +		                           
-		                        '</li>';
+		                        '</li>';*/
 	            }
             } 
 	            

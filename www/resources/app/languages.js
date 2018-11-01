@@ -85,6 +85,8 @@ window.LanguagePackages= {
 		"PROMPT_MSG050": "Access restricted",
 		"PROMPT_MSG051": "Demo accounts has restricted access",
 
+		"PROMPT_MSG054": "Сommand sent, your device will reply shortly.",
+
 		"LOGIN_MSG01": "The login(email) or password you entered is incorrect.",
 		"LOGIN_MSG02": "Login Name / Email",
 		"LOGIN_MSG03": "Password",

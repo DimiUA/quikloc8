@@ -34,7 +34,7 @@ function getPlusInfo(){
             localStorage.PUSH_DEVICE_TOKEN = uid;
             //localStorage.PUSH_DEVICE_TOKEN = "75ba1639-92ae-0c4c-d423-4fad1e48a49d"
         localStorage.PUSH_APPID_ID = 'webapp';
-        localStorage.DEVICE_TYPE = "web";        
+        localStorage.DEVICE_TYPE = "webapp";        
     }
 }
 
@@ -2480,6 +2480,8 @@ function requestAssetPosition(){
             		showNoCreditMessage();
             	}                
                 
+            }else if(result.ERROR == "LOCKED"){
+                showModalMessage(TargetAsset.IMEI, LANGUAGE.PROMPT_MSG054);
             }else{                      
                 App.addNotification({
                     hold: 2000,
@@ -2511,6 +2513,8 @@ function requestAssetStatus(){
             	} else{
             		showNoCreditMessage();
             	}     
+            }else if(result.ERROR == "LOCKED"){
+                showModalMessage(TargetAsset.IMEI, LANGUAGE.PROMPT_MSG054);
             }else{ 
                 App.addNotification({
                     hold: 2000,
@@ -2794,6 +2798,21 @@ function showRestrictedAccessMessage(){
             }            
         ]
     });    
+}
+
+function showModalMessage(header, body){
+    var modalTex = '<div class="color-red custom-modal-title">'+ header +'</div>' +
+                    '<div class="custom-modal-text">'+ body +'</div>';                            
+    App.modal({
+           title: '<div class="custom-modal-logo-wrapper"><img class="custom-modal-logo" src="resources/images/logo_dark.png" alt=""/></div>',
+            text: modalTex,                                
+         buttons: [
+            {
+                text: LANGUAGE.COM_MSG38
+            },
+            
+        ]
+    });          
 }
 
 function loadPageAssetAlarm(){

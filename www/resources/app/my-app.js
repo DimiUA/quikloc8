@@ -570,8 +570,8 @@ $$('#menu li').on('click', function () {
         
     }
 });
-
-/*$$('body').on('click', '.navbar_title_index ', function(){
+/*
+$$('body').on('click', '.navbar_title_index ', function(){
     //var payload = {};
     //console.log('')
     var payload = {
@@ -1177,7 +1177,7 @@ App.onPageInit('asset.alarm', function (page) {
     var alarm = $$(page.container).find('input[name = "checkbox-alarm"]'); 
     var allCheckboxesLabel = $$(page.container).find('label.item-content');
     var allCheckboxes = allCheckboxesLabel.find('input');
-    var alarmFields = ['geolock','tilt','impact','power'];  
+    var alarmFields = ['geolock','tilt','impact','power','input','accOff','accOn'];  
     
 
     alarm.on('change', function(e) { 
@@ -1216,7 +1216,7 @@ App.onPageInit('asset.alarm', function (page) {
                 TargetAsset.IMEI,
                 alarmOptions.options                                
             );                    
-        
+        console.log(url);
         App.showPreloader();
         JSON1.request(url, function(result){ 
                 console.log(result);                  
@@ -1233,6 +1233,8 @@ App.onPageInit('asset.alarm', function (page) {
                     }                        
                 }else if(result.MajorCode == '100' && result.MinorCode == '1006'){
                     showNoCreditMessage();  
+                }else if(result.MajorCode == '100' && result.MinorCode == '1003'){                  
+                    showRestrictedAccessMessage();                
                 }else{
                     App.addNotification({
                         hold: 5000,                       
@@ -1282,8 +1284,10 @@ App.onPageInit('asset.track', function (page) {
     var posMileage = $$(page.container).find('.position_mileage');
     var posSpeed = $$(page.container).find('.position_speed');
     var posAddress = $$(page.container).find('.display_address');
+    var posLatlng = $$(page.container).find('.position_latlng');
     var routeButton = $$(page.container).find('.route_button');
     var panoButton = $$(page.container).find('.pano_button');
+
     var lat = panoButton.data('lat');
     var lng = panoButton.data('lng');
    
@@ -1294,6 +1298,7 @@ App.onPageInit('asset.track', function (page) {
     	'posAddress':posAddress,
         'routeButton':routeButton,
         'panoButton':panoButton,
+        'posLatlng':posLatlng,
     };
   
     StreetViewService.getPanorama({location:new google.maps.LatLng(lat, lng), radius: 50}, processSVData);
@@ -1754,7 +1759,7 @@ App.onPageInit('alarms.assets', function (page) {
         }else{
             App.addNotification({
                 hold: 3000,
-                message: LANGUAGE.PROMPT_MSG029                                   
+                message: LANGUAGE.PROMPT_MSG049                                   
             });
         }
         
@@ -1768,7 +1773,7 @@ App.onPageInit('alarms.select', function (page) {
     var allCheckboxesLabel = $$(page.container).find('label.item-content');
     var allCheckboxes = allCheckboxesLabel.find('input');
     var assets = $$(page.container).find('input[name="Assets"]').val();
-    var alarmFields = ['geolock','tilt','impact','power'];     
+    var alarmFields = ['geolock','tilt','impact','power','input','accOff','accOn'];  
 
     alarm.on('change', function(e) { 
         if( $$(this).prop('checked') ){
@@ -1823,6 +1828,8 @@ App.onPageInit('alarms.select', function (page) {
                     }                        
                 }else if(result.MajorCode == '100' && result.MinorCode == '1006'){
                     showNoCreditMessage();  
+                }else if(result.MajorCode == '100' && result.MinorCode == '1003'){                  
+                    showRestrictedAccessMessage();                
                 }else{
                     App.addNotification({
                         hold: 5000,                       
@@ -2398,13 +2405,15 @@ function setAssetListPosInfo(listObj){
                 }
                    
                 //console.log(POSINFOASSETLIST);
-                localStorage.loginDone = 1; 
-                App.hidePreloader();               
+                               
             }else{
                 //console.log(result);
             }
             init_AssetList(); 
             initSearchbar(); 
+
+            localStorage.loginDone = 1; 
+            App.hidePreloader();
         },
         function(){ }
     ); 
@@ -2812,6 +2821,18 @@ function loadPageAssetAlarm(){
         power: {
             state: true,
             val: 4,
+        },
+        input: {
+            state: true,
+            val: 131072,
+        },
+        accOff: {
+            state: true,
+            val: 65536,
+        },
+        accOn: {
+            state: true,
+            val: 32768,
         }
     };  
     if (assetAlarmVal) {
@@ -2820,7 +2841,7 @@ function loadPageAssetAlarm(){
                 alarms[key].state = false;
             }            
         });
-        if (assetAlarmVal == 17668) {
+        if (assetAlarmVal == 247044) {
             alarms.alarm.state = false;
         }
         
@@ -2833,7 +2854,10 @@ function loadPageAssetAlarm(){
             Geolock: alarms.geolock.state,
             Tilt: alarms.tilt.state,
             Impact: alarms.impact.state,                
-            Power: alarms.power.state,              
+            Power: alarms.power.state,  
+            Input: alarms.input.state,
+            AccOff: alarms.accOff.state,
+            AccOn: alarms.accOn.state,                  
         }
     });
 }
@@ -3197,7 +3221,7 @@ function loadPageLocation(params){
     	time : '',
     };
 
-    if (params && parseFloat(params.lat) !== 0 && parseFloat(params.lng) !== 0 || params && parseFloat(params.Lat) !== 0 && parseFloat(params.Lng) !== 0 || !params && parseFloat(asset.posInfo.lat) !== 0 && parseFloat(asset.posInfo.lng) !== 0) {
+    if (params && parseFloat(params.lat) !== 0 && parseFloat(params.lng) !== 0 || params && parseFloat(params.Lat) !== 0 && parseFloat(params.Lng) !== 0 || !params && asset && parseFloat(asset.posInfo.lat) !== 0 && parseFloat(asset.posInfo.lng) !== 0) {
     	if (params) {
     		if (params.Lat && params.Lng) {
     			window.PosMarker[TargetAsset.IMEI] = L.marker([params.Lat, params.Lng], {icon: Protocol.MarkerIcon[0]}); 
@@ -3679,7 +3703,7 @@ function processClickOnPushNotification(msgJ){
           
        
         //console.log(msg);
-        if( msg.alarm == 'Status' || msg.alarm == 'status' ){            
+        if( msg && msg.alarm && msg.alarm.toLowerCase() == 'status' ){   
             loadPageStatusMessage(msg);                               
         }else if (msg && parseFloat(msg.lat) && parseFloat(msg.lat) || msg && parseFloat(msg.Lat) && parseFloat(msg.Lat)) { 
         	TargetAsset.IMEI = msg.Imei ? msg.Imei : msg.imei;

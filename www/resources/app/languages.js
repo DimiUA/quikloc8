@@ -147,6 +147,7 @@ window.LanguagePackages= {
 		"ALARM_MSG22": "Negative Input",
 		"ALARM_MSG23": "Speed Alert",
 		"ALARM_MSG24": "Turn on/off all",
+		"ALARM_MSG25": "Alarm Input",
 
 		"ASSET_MSG00": "Status",
 		"ASSET_MSG01": "Position",

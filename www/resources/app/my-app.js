@@ -2762,6 +2762,28 @@ function checkBalanceAndLoadPage(pageName){
     }
 }
 
+function showNoDataForDevice(name){
+    var modalTex = '<div class="color-red custom-modal-title">'+ name +'</div>' +
+        '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG004 +'</div>';
+    App.modal({
+        title: '<div class="custom-modal-logo-wrapper"><img class="custom-modal-logo" src="resources/images/logo_dark.png" alt=""/></div>',
+        text: modalTex,
+        buttons: [
+            {
+                text: LANGUAGE.COM_MSG35
+            },
+            {
+                text: LANGUAGE.COM_MSG34,
+                //bold: true,
+                onClick: function () {
+                    //loadPageRechargeCredit();
+                    requestAssetPosition();
+                }
+            },
+        ]
+    });
+}
+
 function showNoCreditMessage(){
     var modalTex = '<div class="color-red custom-modal-title">'+ LANGUAGE.PROMPT_MSG047 +'</div>' +
                     '<div class="custom-modal-text">'+ LANGUAGE.PROMPT_MSG029 +'</div>';                            
@@ -3316,7 +3338,11 @@ function loadPageLocation(params){
         });
 	    
     }else{
-        App.alert(LANGUAGE.PROMPT_MSG004);
+        //App.alert(LANGUAGE.PROMPT_MSG004);
+        showNoDataForDevice(asset.Name);
+        /*App.confirm(LANGUAGE.PROMPT_MSG004, function () {
+            requestAssetPosition();
+        });*/
     }      
       
    

@@ -45,7 +45,7 @@ window.LanguagePackages= {
 		"PROMPT_MSG001": "Live tracking started",
 		"PROMPT_MSG002": "Live tracking stopped",
 		"PROMPT_MSG003": "Password has been changed. Please, login with new credential",
-		"PROMPT_MSG004": "No data position for this device, request it?",
+		"PROMPT_MSG004": "No last data position available. Check location now?",
 		"PROMPT_MSG005": "Playback started",
 		"PROMPT_MSG006": "Playback stopped",
 		"PROMPT_MSG007": "No data for this device",

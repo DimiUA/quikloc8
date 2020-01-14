@@ -3,9 +3,8 @@
   <head>
     <!-- Required meta tags-->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-      <meta http-equiv="Content-Security-Policy" content="default-src *; media-src *; img-src * 'self' data:; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'" />
-      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+      <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: file:; media-src *; img-src * 'self' data:; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'" />
     <!-- Chrome, Firefox OS and Opera -->
     <meta name="theme-color" content="#4E5E6C">
     <!-- Windows Phone -->
@@ -20,13 +19,12 @@
 
     <!-- Cropper Camer -->
     <link rel="stylesheet" href="resources/plugins/cropper/css/cropper.min.css" type="text/css" charset="utf-8"/>
-    <!-- Path to Framework7 Library CSS, Material Theme -->
-    <link rel="stylesheet" href="resources/libraries/framework7/css/framework7.material.min.css">
-    <!-- Path to Framework7 color related styles, Material Theme -->
-    <link rel="stylesheet" href="resources/libraries/framework7/css/framework7.material.colors.min.css">
+    <!-- Path to Framework7 Library CSS, Material Theme -->    
+    <link rel="stylesheet" href="resources/libraries/framework7/css/framework7.ios.min.css">
+    <!-- Path to Framework7 color related styles, Material Theme -->    
+    <link rel="stylesheet" href="resources/libraries/framework7/css/framework7.ios.colors.min.css">
     <!-- Icons -->
     <link rel="stylesheet" href="resources/fonts/framework7-icons.css">
-
     <link rel="stylesheet" href="resources/fonts/fontastic/styles.css">
    
 
@@ -36,12 +34,15 @@
     <!-- MarkerCluster --> 
     <link rel="stylesheet" href="resources/plugins/leaflet.markercluster/css/MarkerCluster.css">
     <link rel="stylesheet" href="resources/plugins/leaflet.markercluster/css/MarkerCluster.Default.css">
-
-    <link rel="stylesheet" href="resources/fonts/roboto.css">
+    
     <link rel="stylesheet" href="resources/app/my-app.css?v=1.1.2">
 
   </head>
   <body class=" theme-dealer" >
+    <div class="statusbar-overlay"></div>
+
+    <!-- First, we need to add Panel's overlay that will overlays app while panel is opened -->
+    <div class="panel-overlay"></div>
 
     <script id="template_Login_Screen" type="text/template7">
       <div class="login-screen " >  
@@ -88,13 +89,12 @@
       </div>
     </script>
     
-    <!-- First, we need to add Panel's overlay that will overlays app while panel is opened -->
-    <div class="panel-overlay"></div>
+    
  
     <!-- Left panel -->
     <script id="template_Popover_Menu" type="text/template7">
       <!-- Left panel -->
-        <div class="panel panel-left panel-reveal">
+        <div class="panel panel-left panel-cover">
             <div class="menu_wrapper">
                 <div class="menu_header bg-dealer">          
                     <div class="user_photo bg-white">
@@ -118,14 +118,14 @@
                                     <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG05}}</div>
                                 </div>
                             </li> 
-                            <li class="item-content list-panel-all close-panel item-link" id="menuRechargeCredit">
-                                <div class="item-media">
-                                    <i class="f7-icons icon-menu-recharge-credit"></i>
-                                </div>
-                                <div class="item-inner">
-                                    <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG02}}</div>
-                                </div>
-                            </li>    
+                            <!-- <li class="item-content list-panel-all close-panel item-link" id="menuRechargeCredit">
+                                   <div class="item-media">
+                                       <i class="f7-icons icon-menu-recharge-credit"></i>
+                                   </div>
+                                   <div class="item-inner">
+                                       <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG02}}</div>
+                                   </div>
+                               </li>  -->   
                             <li class="item-content list-panel-all close-panel item-link" id="menuAlarms">
                                 <div class="item-media">
                                     <i class="f7-icons iconfont icon-menu-alarms"></i>
@@ -133,7 +133,7 @@
                                 <div class="item-inner">
                                     <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG07}}</div>
                                 </div>
-                            </li> 
+                            </li>   
                             <li class="item-content list-panel-all close-panel item-link" id="menuProfile">
                                 <div class="item-media">
                                     <i class="f7-icons iconfont icon-menu-profile"></i>
@@ -142,13 +142,15 @@
                                     <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG03}}</div>
                                 </div>
                             </li>    
-                            <li class="item-content list-panel-all close-panel item-link" id="menuSupport">
-                                <div class="item-media">
+                            <li class="" >
+                                <a href="#" class="external item-content list-panel-all close-panel item-link" id="menuSupport">
+                                    <div class="item-media">
                                     <i class="f7-icons iconfont icon-menu-support"></i>
-                                </div>
-                                <div class="item-inner">
-                                    <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG06}}</div>
-                                </div>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title color-black">{{@global.LANGUAGE.MENU_MSG06}}</div>
+                                    </div>
+                                </a>                                
                             </li>  
                                                  
                             <li class="item-content list-panel-all close-panel" id="menuLogout"> 
@@ -162,9 +164,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="menu_remainings">
-                    {{@global.LANGUAGE.COM_MSG30}}: <span class="remaining_counter">---</span> {{@global.LANGUAGE.COM_MSG31}}
-                </div>
+                <!-- <div class="menu_remainings">
+                    {{@global.LANGUAGE.COM_MSG30}}: <span class="remaining_counter">-</span> {{@global.LANGUAGE.COM_MSG31}}
+                </div> -->
             </div>
         
       </div>
@@ -177,67 +179,71 @@
           <!-- Your main view, should have "view-main" class -->
         <div class="view view-main">
             <!-- Pages container, because we use fixed navbar and toolbar, it has additional appropriate classes-->
-            <div class="pages navbar-fixed">
+            <!-- <div class="pages navbar-fixed"> -->
               <!-- Page, "data-page" contains page name -->
-                <script type="text/template7" id="template_AssetList" >
-                    <div data-page="index" class="page bg-color-page">
+                <!-- <script type="text/template7" id="template_AssetList" > -->
+                    
            
                       <!-- Top Navbar. In Material theme it should be inside of the page-->
-                        <div class="navbar  ">
-                            <div class="navbar-inner">
-                                <div class="left">
-                                    <a href="#" class="link icon-only open-panel "> <i class="f7-icons icon-header-menu"></i></a>
-                                </div>
-                                <div class="left navbar_title_index">{{@global.LANGUAGE.MENU_MSG05}}</div>
-                                <div class="right">
-                                    <!-- <a href="#" class="link button_search" ><i class="f7-icons">search</i></a> -->
-                                    <!-- <a href="#" class="link open-panel notification_button new_not" data-panel="right" ><i class="f7-icons">bell</i></a> -->
-                                    <a href="#" class="link notification_button" ><i class="f7-icons icon-header-alarm"></i></a>
-                                </div>
-                                
-                            </div>
-                            <!-- Search Bar -->
-                                    
-                        </div>  
+            <div class="navbar  ">
+                <div class="navbar-inner">
+                    <div class="left">
+                        <a href="#" class="link icon-only open-panel "> <i class="f7-icons icon-header-menu"></i></a>
+                    </div>
+                    <div class="center index-title">Home</div> <!-- {{@global.LANGUAGE.MENU_MSG05}} -->
+                    <div class="right">
+                        <!-- <a href="#" class="link button_search" ><i class="f7-icons">search</i></a> -->
+                        <!-- <a href="#" class="link open-panel notification_button new_not" data-panel="right" ><i class="f7-icons">bell</i></a> -->
+                        <a href="#" class="link notification_button" ><i class="f7-icons icon-header-alarm"></i></a>
+                    </div>  
 
-                        <form class="searchbar navbar-inner" >
-                            <div class="searchbar-input">
-                                <input type="search" placeholder="{{@global.LANGUAGE.COM_MSG06}}">
-                                <a href="#" class="searchbar-clear"></a>
-                            </div>
-                            <a href="#" class="searchbar-cancel">{{@global.LANGUAGE.COM_MSG04}}</a>
-                        </form>           
-                        <div class="searchbar-overlay"></div>   
+                    <!-- Search Bar -->
+                    <div class="subnavbar">
+                        <div class="buttons-row">
+                            <form class="searchbar" >
+                                <div class="searchbar-input">
+                                    <input type="search" placeholder="Search"> <!-- {{@global.LANGUAGE.COM_MSG06}} -->
+                                    <a href="#" class="searchbar-clear"></a>
+                                </div>
+                                <a href="#" class="searchbar-cancel">Cancel</a> <!-- {{@global.LANGUAGE.COM_MSG04}} -->
+                            </form>  
+                        </div>
+                    </div>                                 
+                </div>                
+            </div>  
+                        
+            <div class="pages navbar-through toolbar-through">  
+                <div data-page="index" class="page with-subnavbar">              
+                    <div class="searchbar-overlay"></div>   
                         <!-- Scrollable page content -->
-                        <div class="page-content ">
-                            <div class="content-block index-search-nothing-found searchbar-not-found">
-                                {{@global.LANGUAGE.COM_MSG05}}
-                            </div>
+                    <div class="page-content ">
+                        <div class="content-block index-search-nothing-found searchbar-not-found ">    
+                          Nothing found   <!-- {{@global.LANGUAGE.COM_MSG05}}   -->          
+                        </div>
 
-                            <div class="list-block media-list no-hairlines no-hairlines-between virtual-list list-block-search assets_list" > 
+                        <div class="list-block media-list no-hairlines no-hairlines-between virtual-list list-block-search assets_list" > 
                                 
-                            </div>
+                        </div>
 
                            
                             <!-- <ul>
                                     <li class="item-link item-content item_asset" data-imei="0000142170222884" data-id="3338363838" style="top: 0px;"><div class="item-media"><img class="item_asset_img" src="http://upload.quiktrak.co/Attachment/images/IMEI_0000142170222884.png?1520943711610alt=" "=""></div><div class="item-inner"><div class="item-title-row"><div class="item-title">Corolla Sydney</div><div class="item-after"><i id="signal-state0000142170222884" class="f7-icons icon-other-signal state-1"></i><i id="satellite-state0000142170222884" class="f7-icons icon-other-satellite state-1"></i></div></div><div id="status-state0000142170222884" class="item-subtitle state-0"><i class="icon-status-fix icon-data-status-1"></i><span id="status-value0000142170222884">Stopped</span></div><div class="item-text"><div class="row no-gutter"><div class="col-50"><i class="f7-icons icon-data-speed asset_list_icon color-dealer"></i><span id="speed-value0000142170222884" class="">0 km/h</span></div><div class="col-50"><i class="f7-icons icon-data-voltage asset_list_icon color-dealer"></i><span id="voltage-value0000142170222884" class="">12.2&nbsp;V</span></div><div class="col-50"><i class="f7-icons icon-data-fuel asset_list_icon color-dealer"></i><span id="fuel-value0000142170222884" class="">61&nbsp;%</span></div></div></div></div></li>
                                 </ul> -->
-                        </div>
-                   
-                    </div>
-                </script>
+                    </div>                   
+                </div>
+                <!-- </script> -->
             </div>
         </div>
     </div>
 
     <div class="popup tablet-fullscreen popup-win" id="win"></div>
-
     <script type="text/javascript" src="cordova.js"></script>
+    
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="resources/libraries/framework7/js/framework7.min.js"></script>
      <!-- jquery libraries -->
     <script type="text/javascript" src="resources/libraries/jquery/jquery-3.4.1.min.js"></script>
-
+<!--     <script type="text/javascript" src="resources/libraries/jquery/jquery.signalR-2.2.0.min.js"></script> -->
     <!-- Path to leaflet Library JS-->
     <script type="text/javascript" src="resources/libraries/leaflet/leaflet.js"></script>
     <!-- Moment -->

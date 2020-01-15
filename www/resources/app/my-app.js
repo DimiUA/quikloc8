@@ -3251,8 +3251,10 @@ function loadPageLocation(params){
         name : '',
         time : '',
     };
-    console.log(asset);
-    if (params && parseFloat(params.lat) !== 0 && parseFloat(params.lng) !== 0 || params && parseFloat(params.Lat) !== 0 && parseFloat(params.Lng) !== 0 || !params && asset && parseFloat(asset.posInfo.lat) !== 0 && parseFloat(asset.posInfo.lng) !== 0) {
+
+    if (params && params.lat && params.lng && parseFloat(params.lat) !== 0 && parseFloat(params.lng) !== 0 ||
+        params && params.Lat && params.Lng && parseFloat(params.Lat) !== 0 && parseFloat(params.Lng) !== 0 ||
+        asset && asset.posInfo && parseFloat(asset.posInfo.lat) !== 0 && parseFloat(asset.posInfo.lng) !== 0) {
         if (params) {
             if (params.Lat && params.Lng) {
                 window.PosMarker[TargetAsset.IMEI] = L.marker([params.Lat, params.Lng], {icon: Protocol.MarkerIcon[0]});
@@ -3317,7 +3319,7 @@ function loadPageLocation(params){
 
     }else{
         //App.alert(LANGUAGE.PROMPT_MSG004);
-        showNoDataForDevice(asset.Name);
+        showNoDataForDevice(TargetAsset.Name);
     }
 
 
